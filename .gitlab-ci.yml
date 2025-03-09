@@ -2,7 +2,8 @@ image: "cuaesd/aesd-dind"
 
 # See https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
 services:
-    - docker:19.03.12-dind
+     - name: docker:19.03.12-dind
+      entrypoint: ["--host=unix:///var/run/docker.sock"]  # Optional, ensures DIND service uses the correct Docker socket
 
 variables:
     GIT_SUBMODULE_STRATEGY: recursive
@@ -11,6 +12,7 @@ variables:
     # `/certs/client` that will be shared between the service and job
     # container, thanks to volume mount from config.toml
     DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_HOST: "tcp://docker:2375"
 
 test:
     stage: test
